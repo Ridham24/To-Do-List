@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './App.css'
+import List from './List'
+import { Button, FormControl, Input, InputLabel } from '@mui/material'
 
 function App() {
   const [list, setList] = useState([])
@@ -13,13 +15,26 @@ function App() {
   return (
     <>
       <h1>To-Do-List</h1>
-      <form>
-      <input type="text" placeholder='Enter the Task...' value={ text} onChange={handleInput}/>
-      <button className='button' onClick={handleList}>Add Task</button>
+      <form className="form">
+        <FormControl>
+          <InputLabel>Write a Todo</InputLabel>
+          <Input
+            type="text"
+            value={text}
+            onChange={handleInput}
+          />
+        </FormControl>
+        <Button
+          disabled={!text}
+          type="submit"
+          onClick={handleList}
+          variant="outlined"
+          color="error"
+        >
+          Add Task
+        </Button>
       </form>
-      <ul>
-        {list.map((task)=><li>{task}</li>)}
-      </ul>
+      <List list={ list} />
     </>
   )
 }
