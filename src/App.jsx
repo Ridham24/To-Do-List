@@ -1,13 +1,27 @@
 import { useState } from 'react'
 import './App.css'
-import List from './List'
+import Listing from './Listing'
 import { Button, FormControl, Input, InputLabel } from '@mui/material'
+import db from './firebase'
+import { useEffect } from 'react'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore'
+import 'firebase/compat/auth'
+import 'firebase/compat/storage'
 
 function App() {
   const [list, setList] = useState([])
   const [text, setText] = useState('')
+  useEffect(() => {
+    db.collection('todos').orderBy('timestamp','desc').onSnapshot(snapshot =>
+      setList(snapshot.docs.map(doc => doc.data().todo))
+    )}
+  , [])
   const handleList = (e) => {
-    setList([...list, text])
+    db.collection('todos').add({
+      todo: text,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
     setText('')
     e.preventDefault()
   }
@@ -34,7 +48,7 @@ function App() {
           Add Task
         </Button>
       </form>
-      <List list={ list} />
+      <Listing list={ list} />
     </>
   )
 }
