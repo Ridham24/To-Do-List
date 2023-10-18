@@ -8,13 +8,14 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
 import 'firebase/compat/storage'
+import {GiBroadDagger} from 'react-icons/gi'
 
 function App() {
   const [list, setList] = useState([])
   const [text, setText] = useState('')
   useEffect(() => {
     db.collection('todos').orderBy('timestamp','desc').onSnapshot(snapshot =>
-      setList(snapshot.docs.map(doc => doc.data().todo))
+      setList(snapshot.docs.map(doc => ({ id:doc.id,input: doc.data().todo })))
     )}
   , [])
   const handleList = (e) => {
@@ -45,6 +46,7 @@ function App() {
           variant="outlined"
           color="error"
         >
+          <GiBroadDagger/>
           Add Task
         </Button>
       </form>
